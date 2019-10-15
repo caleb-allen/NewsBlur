@@ -3,9 +3,9 @@ package com.newsblur.widget;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -20,7 +20,6 @@ import com.newsblur.util.ReadFilter;
 import com.newsblur.util.StoryOrder;
 import com.newsblur.util.StoryUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -94,6 +93,14 @@ class BlurWidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFact
         // and set the text based on the position.
         RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.newsblur_widget_item);
         rv.setTextViewText(R.id.widget_item_title, story.title);
+
+        if(story.imageUrls != null && story.imageUrls.length > 0){
+            Uri uri = Uri.parse(story.imageUrls[0]);
+            rv.setImageViewUri(R.id.widget_item_img_preview, uri);
+            rv.setViewVisibility(R.id.widget_item_img_preview, View.VISIBLE);
+        } else {
+            rv.setViewVisibility(R.id.widget_item_img_preview, View.GONE);
+        }
 
         CharSequence time = StoryUtils.formatRelativeTime(context, story.timestamp);
 
